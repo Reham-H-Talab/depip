@@ -1,0 +1,129 @@
+<div class="flex min-h-screen bg-[#f8fafc] font-sans antialiased">
+  
+  <aside class="w-64 bg-[#0a192f] text-gray-400 flex flex-col justify-between p-5 sticky top-0 h-screen">
+    <div>
+      <div class="flex items-center gap-3 mb-8 px-2">
+        <div class="bg-[#005a43] p-2 rounded-lg text-white font-bold flex items-center justify-center">
+          💚
+        </div>
+        <div>
+          <h1 class="text-white font-bold text-base leading-none tracking-wide">MediStore</h1>
+          <span class="text-[10px] text-gray-500 font-bold tracking-widest">ADMIN PANEL</span>
+        </div>
+      </div>
+
+      <nav class="space-y-1">
+        <p class="text-[10px] font-bold text-gray-600 px-2 uppercase tracking-wider mb-2">Main</p>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition text-xs text-left">📊 Dashboard</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#005a43] text-white font-medium transition text-xs text-left">📦 Products</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition text-xs text-left">📋 Orders</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition text-xs text-left">👥 Customers</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition text-xs text-left">⚙️ Settings</button>
+
+        <p class="text-[10px] font-bold text-gray-600 px-2 uppercase tracking-wider mt-6 mb-2">Store</p>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition text-xs text-left">🏪 View Store</button>
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition text-xs text-left">📍 Store Map</button>
+      </nav>
+    </div>
+
+    <div class="border-t border-gray-800 pt-4 flex items-center gap-3 px-2">
+      <div class="w-8 h-8 rounded-full bg-[#005a43] flex items-center justify-center text-white font-bold text-xs">AM</div>
+      <span class="text-xs font-semibold text-white">Admin Manager</span>
+    </div>
+  </aside>
+
+  <main class="flex-1 p-8 overflow-y-auto">
+    
+    <header class="flex justify-between items-center mb-6">
+      <div class="text-xs text-gray-400 font-medium">
+        MediStore <span class="mx-1 text-gray-300">&gt;</span> <span class="text-gray-600">Admin</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="p-1 text-gray-400 hover:text-gray-600 transition text-sm">🔔</button>
+        <div class="w-8 h-8 rounded-full bg-[#005a43] text-white flex items-center justify-center font-bold text-xs">AM</div>
+      </div>
+    </header>
+
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Products</h2>
+        <p class="text-xs text-gray-400 mt-0.5">{{ filteredProducts.length }} products in catalogue</p>
+      </div>
+      <button class="bg-[#005a43] hover:bg-[#004432] text-white text-xs font-semibold px-4 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition">
+        <span class="text-sm font-bold">+</span> Add Product
+      </button>
+    </div>
+
+    <div class="flex items-center gap-4 mb-6">
+      <div class="relative w-72">
+        <span class="absolute left-3 top-2.5 text-xs text-gray-400">🔍</span>
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search products..." 
+               class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#005a43] bg-white text-xs transition">
+      </div>
+      
+      <div class="flex items-center gap-1.5 overflow-x-auto">
+        <button *ngFor="let cat of categories" (click)="selectedCategory = cat"
+                [class]="selectedCategory === cat ? 'bg-[#005a43] text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-sm transition' : 'bg-white border border-gray-200 text-gray-500 text-xs px-3 py-1.5 rounded-lg hover:bg-gray-50 transition'">
+          {{ cat }}
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50/70">
+            <th class="px-6 py-4">Product</th>
+            <th class="px-6 py-4">Category</th>
+            <th class="px-6 py-4">Price</th>
+            <th class="px-6 py-4">Stock</th>
+            <th class="px-6 py-4">Rating</th>
+            <th class="px-6 py-4">Status</th>
+            <th class="px-6 py-4"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-50 text-xs text-gray-600">
+          <tr *ngFor="let product of filteredProducts" class="hover:bg-gray-50/40 transition">
+            <td class="px-6 py-4 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 p-1 flex items-center justify-center overflow-hidden">
+                <img [src]="product.image" [alt]="product.name" class="object-contain max-h-full max-w-full rounded">
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800 text-sm">{{ product.name }}</h4>
+                <p class="text-[11px] text-gray-400 font-medium">{{ product.brand }}</p>
+              </div>
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-100/50">
+                {{ product.category }}
+              </span>
+            </td>
+            <td class="px-6 py-4 font-semibold text-gray-900">
+              ${{ product.price }}
+              <span *ngIf="product.oldPrice" class="text-[10px] text-gray-400 line-through font-normal ml-1">${{ product.oldPrice }}</span>
+            </td>
+            <td class="px-6 py-4">
+              <span [class]="product.stock <= 10 ? 'text-amber-600 font-bold flex items-center gap-1' : 'text-gray-700 font-medium'">
+                <span *ngIf="product.stock <= 10">⚠️</span> {{ product.stock }}
+              </span>
+            </td>
+            <td class="px-6 py-4 font-medium">
+              <span class="text-amber-400 text-sm">★</span> {{ product.rating }} 
+              <span class="text-[10px] text-gray-400 font-normal">({{ product.reviews }})</span>
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                {{ product.status }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-right space-x-3 text-sm">
+              <button class="text-gray-400 hover:text-gray-600 transition">✏️</button>
+              <button class="text-gray-400 hover:text-red-500 transition">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
